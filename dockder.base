@@ -1,0 +1,21 @@
+1.4.4：镜像导出：
+可以将镜像从本地导出问为一个压缩文件，然后复制到其他服务器进行导入使用。
+#导出方法1：
+[root@docker-server1 ~]# docker save -o /opt/centos.tar.gz centos
+[root@docker-server1 ~]# ll /opt/centos.tar.gz 
+-rw------- 1 root root 205225472 Nov  1 03:52 /opt/centos.tar.gz
+
+#导出方法2：
+[root@docker-server1 ~]# docker save centos > /opt/centos-1.tar.gz
+[root@docker-server1 ~]# ll /opt/centos-1.tar.gz 
+-rw-r--r-- 1 root root 205225472 Nov  1 03:52 /opt/centos-1.tar.gz
+
+#查看镜像内容：
+[root@docker-server1 ~]# cd /opt/
+[root@docker-server1 opt]# tar xvf centos.tar.gz
+[root@docker-server1 opt]# cat manifest.json  #包含了镜像的相关配置，配置文件、分层
+[{"Config":"196e0ce0c9fbb31da595b893dd39bc9fd4aa78a474bbdc21459a3ebe855b7768.json","RepoTags":["docker.io/centos:latest"],"Layers":["892ebb5d1299cbf459f67aa070f29fdc6d83f40
+25c58c090e9a69bd4f7af436b/layer.tar"]}]
+
+#分层为了方便文件的共用，即相同的文件可以共用 [{"Config":"配置文件.json","RepoTags":["docker.io/nginx:latest"],"Layers":["分层1/layer.tar","分层2 /layer.tar","分层3 /layer.tar"]}] 
+
